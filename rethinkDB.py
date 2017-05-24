@@ -23,8 +23,18 @@ while y < 100:
 
 
 
+
 print("Aantal items in de Database", r.table('Sensoren').count().run(conn))
 print("Aantal items in de Database waar vochtigheid > 50", r.table('Sensoren')['Vochtigheid'].count(lambda Vochtigheid: Vochtigheid > 50).run(conn))
 print("Aantal items in de Database waar vochtigheid < 50", r.table('Sensoren')['Vochtigheid'].count(lambda Vochtigheid: Vochtigheid < 50).run(conn))
 print("Aantal items in de Database waar vochtigheid == 50", r.table('Sensoren')['Vochtigheid'].count(lambda Vochtigheid: Vochtigheid == 50).run(conn))
 print("Alle vochtigheid bij elkaar opgeteld", r.table('Sensoren')['Vochtigheid'].count(lambda Vochtigheid: Vochtigheid + Vochtigheid).run(conn))
+
+#Table aanmaken in ISEN DB
+#r.db("ISEN").table_create("Sensoren").run()
+
+#Data toevoegen aan data
+r.db("ISEN").table('Sensoren').filter({"id": "1"})
+
+#r.db("ISEN").table("Sensoren").insert([{ "id": "1", "sensorID": "1", "Vochtigheid": "99"}]).run()
+
