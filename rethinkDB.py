@@ -3,8 +3,28 @@ Python Drivers: https://www.rethinkdb.com/docs/install-drivers/
 URL van de Server: 146.185.180.205
 Webpanel: 146.185.180.205:8080
 '''
-
+from random import randint
 import rethinkdb as r
-r.connect('146.185.180.205', 28015).repl()
+from datetime import datetime
+conn = r.connect(host='146.185.180.205',
+                 port=28015,
+                 db='testMark')
 
-r.table('tv_shows').insert({ 'name': 'bassie en adriaan' }).run()
+y = 0
+while y < 100:
+    x = randint(0, 100)
+    r.table("Sensoren").insert([{
+            "sensorID": "1",
+            "Vochtigheid": x,
+            'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    }]).run(conn)
+    y +=1
+
+
+
+
+print("Aantal items in de Database", r.table('Sensoren').count().run(conn))
+print("Aantal items in de Database waar vochtigheid > 50", r.table('Sensoren')['Vochtigheid'].count(lambda Vochtigheid: Vochtigheid > 50).run(conn))
+print("Aantal items in de Database waar vochtigheid < 50", r.table('Sensoren')['Vochtigheid'].count(lambda Vochtigheid: Vochtigheid < 50).run(conn))
+print("Aantal items in de Database waar vochtigheid == 50", r.table('Sensoren')['Vochtigheid'].count(lambda Vochtigheid: Vochtigheid == 50).run(conn))
+print("Alle vochtigheid bij elkaar opgeteld", r.table('Sensoren')['Vochtigheid'].count(lambda Vochtigheid: Vochtigheid + Vochtigheid).run(conn))
