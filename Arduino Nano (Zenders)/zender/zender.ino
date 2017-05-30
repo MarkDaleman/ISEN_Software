@@ -15,7 +15,7 @@ void setup()
     pinMode(LED_BUILTIN, OUTPUT);
     Serial.begin(9600);    // Debugging only
     Serial.println("setup");
-     vw_set_tx_pin(4);          // Sets pin D12 as the TX pin
+     vw_set_tx_pin(12);          // Sets pin D12 as the TX pin
     // Initialise the IO and ISR
     vw_set_ptt_inverted(true); // Required for DR3100
     vw_setup(4000);  // Bits per sec
@@ -24,7 +24,6 @@ void setup()
 void loop()
 {
     const char *msg = "hello";
-
     digitalWrite(LED_BUILTIN, HIGH);
     vw_send((uint8_t *)msg, strlen(msg));
     vw_wait_tx(); // Wait until the whole message is gone
