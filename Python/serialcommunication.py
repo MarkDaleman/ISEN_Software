@@ -3,6 +3,13 @@
 Python 3 code
 Geschreven door Mark & Clemens
 ISEN Minor Project
+
+Ontvanger (Arduino Nano)
+GRD  : GRD
+VCC  : 5V
+DATA : D12
+USB  : Raspberry Pi
+
 """
 import serial, string, time,re
 
