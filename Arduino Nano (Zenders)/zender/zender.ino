@@ -24,7 +24,7 @@ void setup()
 void loop()
 {
     const char *msg = "hello";
-
+    Serial.println("Data verzonden");
     digitalWrite(LED_BUILTIN, HIGH);
     vw_send((uint8_t *)msg, strlen(msg));
     vw_wait_tx(); // Wait until the whole message is gone
