@@ -9,9 +9,7 @@ from datetime import datetime
 conn = r.connect(host='146.185.180.205',
                  port=28015,
                  db='testMark')
-'''
-y = 0
-while y < 9090909090:
+
     x = randint(0, 100)
     r.table("Sensoren").insert([{
             "sensorID": "1",
@@ -19,7 +17,6 @@ while y < 9090909090:
             'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     }]).run(conn)
     y +=1
-'''
 
 print("Aantal items in de Database", r.table('Sensoren').count().run(conn))
 print("Aantal items in de Database waar vochtigheid > 50", r.table('Sensoren')['Vochtigheid'].count(lambda Vochtigheid: Vochtigheid > 50).run(conn))
@@ -34,4 +31,3 @@ print("Alle vochtigheid bij elkaar opgeteld", r.table('Sensoren')['Vochtigheid']
 #r.db("ISEN").table('Sensoren').filter({"id": "1"})
 
 #r.db("ISEN").table("Sensoren").insert([{ "id": "1", "sensorID": "1", "Vochtigheid": "99"}]).run()
-
