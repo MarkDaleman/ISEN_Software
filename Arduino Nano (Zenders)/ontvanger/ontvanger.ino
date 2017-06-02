@@ -12,36 +12,32 @@
 
 void setup()
 {
+<<<<<<< HEAD
+    Serial.begin(9600);  // Debugging only    
+=======
     Serial.begin(9600);  // Debugging only
     Serial.println("setup");
-    
+>>>>>>> 7da91edfbdf67bf670512032eca5e54c72e56cd9
     // Initialise the IO and ISR
     vw_set_rx_pin(12);       //Sets pin D12 as the RX Pin
     vw_set_ptt_inverted(true); // Required for DR3100
     vw_setup(4000);  // Bits per sec
-
     vw_rx_start();       // Start the receiver PLL running
 }
 
+
 void loop()
 {
-    uint8_t buf[VW_MAX_MESSAGE_LEN];
-    uint8_t buflen = VW_MAX_MESSAGE_LEN;
-
-    if (vw_get_message(buf, &buflen)) // Non-blocking
-    {
-  int i;
-
-        digitalWrite(13, true); // Flash a light to show received good message
-  // Message with a good checksum received, dump it.
-  Serial.print("Got: ");
-  
-  for (i = 0; i < buflen; i++)
-  {
-      Serial.print((char)buf[i]);
-      Serial.print(" ");
-  }
-  Serial.println("");
-        digitalWrite(13, false);
-    }
+   int test;
+   int msg[VW_MAX_MESSAGE_LEN];
+   uint8_t buf[VW_MAX_MESSAGE_LEN];
+   uint8_t buflen = VW_MAX_MESSAGE_LEN;
+   if(vw_have_message() == HIGH)
+   {
+     vw_get_message(buf, &buflen);
+     
+     
+     Serial.println(buf[0]);
+     Serial.println(buf[1]);
+   }
 }
