@@ -27,5 +27,4 @@ while True:
 	else:
 		sys.stdout.write(varx)
 		list.append(varx.rstrip())
-		#print(list)
-		print(varx[1:])
+		print(list)
