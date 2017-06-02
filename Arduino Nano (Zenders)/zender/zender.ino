@@ -1,32 +1,58 @@
-// transmitter.pde
-//
-// Simple example of how to use VirtualWire to transmit messages
-// Implements a simplex (one-way) transmitter with an TX-C1 module
-//
-// See VirtualWire.h for detailed API docs
-// Author: Mike McCauley (mikem@airspayce.com)
-// Copyright (C) 2008 Mike McCauley
-// $Id: transmitter.pde,v 1.3 2009/03/30 00:07:24 mikem Exp $
+/*
+ * Zender.ino
+ * 
+ * Geschreven door Mark & Clemens
+ * Project ISEN
+ * Versie: 1.0
+ */
 
+/*
+ * Deze library is nodig voor de communicatie via 433mhz
+ * 
+ */
 #include <VirtualWire.h>
 
+/*
+ * Hier declareren we 2 waardes, SensorNummer en SensorWaarde.
+ * Ook defineren we de Array, genaamd Istr. Met een lengte van 6
+ */
+int SensorNummer;
+int SensorWaarde;
+char Istr[6];
+
+/* 
+ *  In de setup zetten wij neer wat de Arduino nodig heeft om te kunnen werken
+ *  Hier zetten wij de TX pin (van het verzenden) op pin D12 (digital)
+ *  Ook moet vw_set_ptt_inverted aan omdat wij met een DRS3100 werken
+ *  vw_setup() moet op 4000 staan voor de DRS3100, dit is het aantal bits per seconde.
+ *  Daarna geven we een delay aan.
+ */
 void setup()
 {
-    pinMode(LED_BUILTIN, OUTPUT);
-    Serial.begin(9600);    // Debugging only
-    Serial.println("setup");
-     vw_set_tx_pin(12);          // Sets pin D12 as the TX pin
-    // Initialise the IO and ISR
-    vw_set_ptt_inverted(true); // Required for DR3100
-    vw_setup(4000);  // Bits per sec
+  Serial.begin(9600);    // Debugging only
+  vw_set_tx_pin(12);        
+  // Initialise the IO and ISR
+  vw_set_ptt_inverted(true); 
+  vw_setup(4000);  ec
+  delay(250); 
 }
-
+/*
+ * Hieronder is de Main loop. Deze zal continu draaien op de Arduino
+ * Sensornummer is voor elke sensor anders. Deze Arduino heeft ID 5
+ * De Waarde van de Sensor staat hier nu random tussen de 10 en 90 (om te testen)
+ * Vervolgens stoppen we de waarde en sensornummer in de Array
+ * De Array versturen we met vw_send richting de Raspberry Pi
+ * Daarna wachten we tot het bericht is verzonden en gaan we in slaap
+ */
 void loop()
-{
-    const char *msg = "hello";
-    digitalWrite(LED_BUILTIN, HIGH);
-    vw_send((uint8_t *)msg, strlen(msg));
-    vw_wait_tx(); // Wait until the whole message is gone
-    digitalWrite(LED_BUILTIN, LOW);
-    delay(500);
+{      
+  int SensorNummer = 5;        
+  int SensorWaarde = random(10, 90);   
+  Istr[0] = SensorNummer;
+  Istr[1] =  SensorWaarde;
+  if(SensorNummer > 0 and SensorWaarde > 10 and SensorWaarde < 100){
+     vw_send((uint8_t *)Istr, strlen(Istr));
+     vw_wait_tx(); // Wait until the whole message is gone
+  }
+  delay(3000);
 }
