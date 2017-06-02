@@ -16,12 +16,11 @@ import sys
 
 output = " "
 ser = serial.Serial('/dev/ttyUSB0', 9600, 8, 'N', 1, timeout=1)
+dic = {}
 
 list = []
 varx = ""
 while True:
-	#print(ser.readline())
-
 	varx = ser.readline().decode('utf-8').replace(":", "")
 	if varx == "":
 		continue
