@@ -18,14 +18,17 @@ output = " "
 ser = serial.Serial('/dev/ttyUSB0', 9600, 8, 'N', 1, timeout=1)
 
 list = []
+dict = {0:0, 1:0, 2:0, 3:0, 4:0, 5:0}
 varx = ""
 while True:
 	#print(ser.readline())
 
-	varx = ser.readline().decode('utf-8').replace(":", "")
+	varx = ser.readline().decode('utf-8').replace(" ", "")
 	if varx == "":
 		continue
 	else:
-		sys.stdout.write(varx)
-		list.append(varx.rstrip())
-		print(list)
+		if varx[0] == '5':
+			dict[5] = varx[1] + varx[2]
+			print(dict[5])
+		else:
+			continue
