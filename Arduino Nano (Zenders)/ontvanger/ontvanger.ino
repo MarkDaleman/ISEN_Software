@@ -13,7 +13,7 @@
 void setup()
 {
     Serial.begin(9600);  // Debugging only
-    Serial.println("setup");
+    //Serial.println("setup");
     // Initialise the IO and ISR
     vw_set_rx_pin(12);       //Sets pin D12 as the RX Pin
     vw_set_ptt_inverted(true); // Required for DR3100
@@ -32,8 +32,10 @@ void loop()
    {
      vw_get_message(buf, &buflen);
      
-     
-     Serial.println(buf[0]);
-     Serial.println(buf[1]);
+     if (buf[0] > 0){
+         Serial.print(buf[0]);
+         Serial.print(buf[1]);
+         Serial.println();
+     }
    }
 }
