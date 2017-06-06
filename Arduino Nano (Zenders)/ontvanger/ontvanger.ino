@@ -14,7 +14,6 @@ void setup()
 {
 
     Serial.begin(9600);  // Debugging only    
-    Serial.begin(9600);  // Debugging only
     Serial.println("setup");
     // Initialise the IO and ISR
     vw_set_rx_pin(12);       //Sets pin D12 as the RX Pin
