@@ -16,11 +16,13 @@
 #define RELAY1  7  
 /*
  * Hier declareren we 2 waardes, SensorNummer en SensorWaarde.
+ * Sensornummer geeft aan om welke sensor het gaat!
  * Ook defineren we de Array, genaamd Istr. Met een lengte van 6
  */
-int SensorNummer;
+int SensorNummer = 1;
 int SensorWaarde;
 char Istr[6];
+
 /*
  * Dit is nodig voor de soil meter, deze is op pin A0 aangesloten (Analoog)
  * Ook moet de output value een integer zijn.
@@ -34,8 +36,8 @@ int output_value ;
  *  Ook moet vw_set_ptt_inverted aan omdat wij met een DRS3100 werken
  *  vw_setup() moet op 4000 staan voor de DRS3100, dit is het aantal bits per seconde.
  *  Daarna geven we een delay aan.
+ *  Ook staat hier onder de ISR watchdog interrupt timer.
  */
- 
 // watchdog interrupt
 ISR (WDT_vect) 
 {
@@ -46,7 +48,7 @@ void setup()
 {
   pinMode(RELAY1, OUTPUT);       
   digitalWrite(RELAY1,1);    
-  Serial.begin(9600);
+  //Serial.begin(9600); // debugging only
   vw_set_tx_pin(12);        
   vw_set_ptt_inverted(true); 
   vw_setup(4000); 
@@ -65,17 +67,23 @@ void myWatchdogEnable(const byte interval)
   sleep_mode();            // now goes to Sleep and waits for the interrupt
   }
 
+/*
+ * In de sendData(); functie wordt de waarde van de soil meter 10 keer verstuurd over het 433mhz kanaal
+ * Mocht de waarde van de sensor onder de 25 liggen, wordt de pomp ingeschakeld.
+ * Met VirtualWire wordt een Array met data verstuurd
+ */
 void sendData(){    
     for(int i=0; i <= 10; i++){
       output_value = analogRead(sensor_pin);
       output_value = map(output_value,1023,431,0,100); //A1
-      //output_value = map(output_value,1023,140,0,100); //A2
-      int SensorNummer = 1;
-
       if(output_value > 100){
         output_value = 99;           
       }
-
+      /* 
+       * Als de waarde van de plant 10 keer is verzonden
+       * Controlleer of de waarde van de plant lager dan 25% is
+       * Zo ja, pomp water!
+       */
       if(i == 10 and output_value < 25){
         pompje();
        }
@@ -83,10 +91,11 @@ void sendData(){
       if(output_value == 0){
         output_value = 1;
       }
+      
       else{
         output_value = output_value;
       }
-      Serial.println(output_value);
+
       Istr[0] = SensorNummer;
       Istr[1] =  output_value;
         if(SensorNummer > 0){
@@ -95,14 +104,21 @@ void sendData(){
         }
     }   
 }
-
+/*
+ * Hieronder is de functie pompje();
+ * De pomp is geschakeld met een Relay.
+ * De delay geeft aan hoe lang de pomp aan moet
+ * In dit geval is dat 8 sconden
+ */
 void pompje(){
-        Serial.println("Pompje gaat aan");
         digitalWrite(RELAY1,0);
         delay(8000);
         digitalWrite(RELAY1,1);  
 }
-
+/*
+ * Deze loop draait altijd. Na de sendData(); gaat het programma in slaap
+ * in dit geval 450 * 8 seconden = 3600 seconden = 60 minuten
+ */
 void loop(){
   sendData();
   //sleep for a total of 240 seconds
