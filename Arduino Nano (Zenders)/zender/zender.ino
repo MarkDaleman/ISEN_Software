@@ -48,10 +48,11 @@ void setup()
 {
   pinMode(RELAY1, OUTPUT);       
   digitalWrite(RELAY1,1);    
-  //Serial.begin(9600); // debugging only
+  Serial.begin(9600); // debugging only
   vw_set_tx_pin(12);        
   vw_set_ptt_inverted(true); 
-  vw_setup(4000); 
+  vw_setup(4000);
+  Serial.println("Setup completed"); 
   delay(2500);
   
 }
@@ -73,12 +74,14 @@ void myWatchdogEnable(const byte interval)
  * Met VirtualWire wordt een Array met data verstuurd
  */
 void sendData(){    
+    Serial.println("Send Data functie");
     for(int i=0; i <= 10; i++){
       output_value = analogRead(sensor_pin);
-      output_value = map(output_value,1023,431,0,100); //A1
+      output_value = map(output_value,716,255,0,100);
       if(output_value > 100){
         output_value = 99;           
       }
+      Serial.println(output_value);
       /* 
        * Als de waarde van de plant 10 keer is verzonden
        * Controlleer of de waarde van de plant lager dan 25% is
@@ -98,6 +101,9 @@ void sendData(){
 
       Istr[0] = SensorNummer;
       Istr[1] =  output_value;
+      Serial.println("Array");
+      Serial.println(SensorNummer);
+      Serial.println(output_value);
         if(SensorNummer > 0){
            vw_send((uint8_t *)Istr, strlen(Istr));
            vw_wait_tx(); // Wait until the whole message is gone
@@ -111,6 +117,8 @@ void sendData(){
  * In dit geval is dat 8 sconden
  */
 void pompje(){
+  Serial.println("Pompje functie");
+  Serial.println("Relay gaat aan en uit");
         digitalWrite(RELAY1,0);
         delay(8000);
         digitalWrite(RELAY1,1);  
@@ -120,10 +128,11 @@ void pompje(){
  * in dit geval 450 * 8 seconden = 3600 seconden = 60 minuten
  */
 void loop(){
+  Serial.println("Main loop");
   sendData();
-  //sleep for a total of 240 seconds
+  //sleep for a total of 8 seconds
   int i;
-  for (i = 0; i < 450; i++)
+  for (i = 0; i < 1; i++)
   { 
     myWatchdogEnable (0b100001);  // 8 seconds
   }

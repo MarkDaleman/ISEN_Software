@@ -19,9 +19,9 @@ void loop() {
   Serial.println("----------");
   Serial.println(output_value);
   Serial.print("----------");
-  output_value = map(output_value,1023,431,0,100);
+  output_value = map(output_value,716,255,0,100);
   Serial.print("Mositure : ");
   Serial.print(output_value);
   Serial.println("%");
-  delay(1000);
+  delay(500);
   }
