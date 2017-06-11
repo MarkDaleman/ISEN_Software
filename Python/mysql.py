@@ -1,5 +1,6 @@
 #!/usr/bin/python
-import MySQLdb
+import MySQLdb, datetime
+from datetime import timedelta
 
 db = MySQLdb.connect(host="146.185.176.134",    # your host, usually localhost
                      user="root",               # your username
@@ -8,14 +9,36 @@ db = MySQLdb.connect(host="146.185.176.134",    # your host, usually localhost
 
 cur = db.cursor()
 
-vocht = '44'
+vocht = '66'
+planttid = 6
 
-cur.execute("INSERT INTO Planten (plantid, moisture) VALUES (4, vocht)")
+# cur.execute("INSERT INTO Planten (plantid, moisture) VALUES (4, '55')")
 # cur.execute("INSERT INTO Planten (plantid, moisture) VALUES (2, '76')")
 # cur.execute("INSERT INTO Planten (plantid, moisture) VALUES (1, '33')")
 # cur.execute("INSERT INTO Planten (plantid, moisture) VALUES (1, '60')")
+#
+# cur.execute("INSERT INTO Planten (plantid, moisture) VALUES (%s,%s) """,(planttid, vocht))
 
-# INSERT INTO user (companyName,user,pass,imei, checkPoint,licenceDate) VALUES (%s,%s,%s,%s,%s,%s) """,(companyname,username, password,imei,tval,currdate))
+cmd = "SELECT * FROM Planten"
+
+
+try:
+    # Execute the SQL command
+    cur.execute(cmd)
+    # Fetch all the rows in a list of lists.
+    results = cur.fetchall()
+    for row in results:
+        timestamp = row[3]
+    #   print "timestamp: %s" % (timestamp)
+    #   print "TIMESTAMP: " + now
+        if timestamp < datetime.datetime.now()-datetime.timedelta(seconds=10):
+            verwijder = "DELETE FROM Planten WHERE timestamp = '%s'" % (timestamp)
+            print "ouder dan een jaar"
+            cur.execute(verwijder)
+        else:
+            print "jonger dan een jaar"
+except e:
+   print e
 
 
 # for row in cur.fetchall():
