@@ -19,6 +19,7 @@ db = MySQLdb.connect(host="146.185.176.134",    # your host, usually localhost
                      user="root",               # your username
                      passwd="root",             # your password
                      db="Sensoren")             # name of the data base
+cur = db.cursor()
 
 output = " "
 ser = serial.Serial('/dev/ttyUSB0', 9600, 8, 'N', 1, timeout=1)
@@ -28,29 +29,16 @@ varx = ""
 while True:
 	varx = ser.readline().decode('utf-8').replace(" ", "")
 	varx = ser.readline().decode('utf-8').replace(":", "")
+	#print len(varx)
 	if varx == "":
 		continue
-        datumCheck()
 	else:
-		cur.execute("INSERT INTO Planten (plantid, moisture) VALUES (%s,%s) """,(varx[0], varx[1] + varx[2]))
-        datumCheck()
-
-def datumCheck():
-    cmd = "SELECT * FROM Planten"
-    try:
-        # Execute the SQL command
-        cur.execute(cmd)
-        # Fetch all the rows in a list of lists.
-        results = cur.fetchall()
-        for row in results:
-            timestamp = row[3]
-        #   print "timestamp: %s" % (timestamp)
-        #   print "TIMESTAMP: " + now
-            if timestamp < datetime.datetime.now()-datetime.timedelta(days=365):
-                verwijder = "DELETE FROM Planten WHERE timestamp = '%s'" % (timestamp)
-                print "Record is ouder dan een jaar, wordt verwijdert."
-                cur.execute(verwijder)
-            else:
-                print "Record is nog geen jaar, blijft bewaard."
-    except e:
-       print e
+        	if len(varx) == 4:
+            		print varx[0], varx[1]
+    			cur.execute("INSERT INTO PlantenTest (plantid, moisture) VALUES (%s,%s) """,(varx[0], varx[1]))
+			db.commit()
+        	elif len(varx) == 5:
+            		print varx[0], varx[1] + varx[2]
+    			cur.execute("INSERT INTO PlantenTest (plantid, moisture) VALUES (%s,%s) """,(varx[0], varx[1] + varx[2]))
+    			db.commit()
+			db.close()
