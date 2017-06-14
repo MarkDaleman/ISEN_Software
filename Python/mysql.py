@@ -12,12 +12,12 @@ cur = db.cursor()
 vocht = '66'
 planttid = 6
 
-cur.execute("INSERT INTO Planten (plantid, moisture) VALUES (4, '55')")
-cur.execute("INSERT INTO Planten (plantid, moisture) VALUES (2, '76')")
-cur.execute("INSERT INTO Planten (plantid, moisture) VALUES (1, '33')")
-cur.execute("INSERT INTO Planten (plantid, moisture) VALUES (1, '60')")
+cur.execute("INSERT INTO PlantenTest (plantid, moisture) VALUES (4, '55')")
+cur.execute("INSERT INTO PlantenTest (plantid, moisture) VALUES (2, '76')")
+cur.execute("INSERT INTO PlantenTest (plantid, moisture) VALUES (1, '33')")
+cur.execute("INSERT INTO PlantenTest (plantid, moisture) VALUES (1, '60')")
 
-cur.execute("INSERT INTO Planten (plantid, moisture) VALUES (%s,%s) """,(planttid, vocht))
+cur.execute("INSERT INTO PlantenTest (plantid, moisture) VALUES (%s,%s) """,(planttid, vocht))
 
 # cmd = "SELECT * FROM Planten"
 #
