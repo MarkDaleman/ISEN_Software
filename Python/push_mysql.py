@@ -25,20 +25,22 @@ output = " "
 ser = serial.Serial('/dev/ttyUSB0', 9600, 8, 'N', 1, timeout=1)
 
 varx = ""
-
+		
 while True:
 	varx = ser.readline().decode('utf-8').replace(" ", "")
 	varx = ser.readline().decode('utf-8').replace(":", "")
-	#print len(varx)
-	if varx == "":
+
+	if varx == "" or varx[0] == '0':
 		continue
 	else:
-        	if len(varx) == 4:
-            		print varx[0], varx[1]
-    			cur.execute("INSERT INTO PlantenTest (plantid, moisture) VALUES (%s,%s) """,(varx[0], varx[1]))
-			db.commit()
-        	elif len(varx) == 5:
-            		print varx[0], varx[1] + varx[2]
-    			cur.execute("INSERT INTO PlantenTest (plantid, moisture) VALUES (%s,%s) """,(varx[0], varx[1] + varx[2]))
-    			db.commit()
-			db.close()
+		try:
+			if len(varx) == 4:
+				print varx[0], varx[1]
+				cur.execute("INSERT INTO Planten (plantid, moisture) VALUES (%s,%s) """,(varx[0], varx[1]))
+				db.commit()
+			elif len(varx) == 5:
+				print varx[0], varx[1] + varx[2]
+				cur.execute("INSERT INTO Planten (plantid, moisture) VALUES (%s,%s) """,(varx[0], varx[1] + varx[2]))
+				db.commit()
+		except:
+			continue
