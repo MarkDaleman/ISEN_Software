@@ -15,6 +15,8 @@ import serial, string, time,re, sys, MySQLdb
 from random import randint
 from datetime import datetime
 
+time.sleep(10)
+
 db = MySQLdb.connect(host="146.185.176.134",    # your host, usually localhost
                      user="root",               # your username
                      passwd="root",             # your password
