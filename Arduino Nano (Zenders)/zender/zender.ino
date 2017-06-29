@@ -19,7 +19,7 @@
  * Sensornummer geeft aan om welke sensor het gaat!
  * Ook defineren we de Array, genaamd Istr. Met een lengte van 6
  */
-int SensorNummer = 5;
+int SensorNummer = 1;
 int SensorWaarde;
 char Istr[6];
 
@@ -87,7 +87,7 @@ void sendData(){
        * Controlleer of de waarde van de plant lager dan 25% is
        * Zo ja, pomp water!
        */
-      if(i == 10 and output_value < 25){
+      if(i == 10 and output_value < 35){
         pompje();
        }
 
@@ -120,7 +120,7 @@ void pompje(){
   //Serial.println("Pompje functie");
   //Serial.println("Relay gaat aan en uit");
         digitalWrite(RELAY1,0);
-        delay(8000);
+        delay(3000);
         digitalWrite(RELAY1,1);  
 }
 /*
@@ -132,7 +132,7 @@ void loop(){
   sendData();
   //sleep for a total of 8 seconds
   int i;
-  for (i = 0; i < 1; i++)
+  for (i = 0; i < 3; i++)
   { 
     myWatchdogEnable (0b100001);  // 8 seconds
   }
