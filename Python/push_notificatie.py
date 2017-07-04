@@ -49,4 +49,4 @@ for row in results:
     moisture = row[1]
     #print "id: %s" % (plantid) + " moisture: %s" % (moisture)
     if moisture < '35':
-        sendBericht("Plant %s" % (plantid) + " heeft uw aandacht nodig", "Geef het water anders gebeurt dit automatisch")
+        sendBericht("Plant %s" % (plantid) + " heeft weinig water.", "Er zal binnenkort automatisch water worden gegeven.")
