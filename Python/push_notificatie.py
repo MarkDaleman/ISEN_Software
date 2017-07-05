@@ -45,8 +45,10 @@ def sendBericht(messageTitle, messageBody):
     print urlopen(request).read()
 
 for row in results:
-    plantid = row[0]
+    #plantid = row[0]
     moisture = row[1]
-    #print "id: %s" % (plantid) + " moisture: %s" % (moisture)
+    #timestamp = row[2]
+    naam = row[3]
+    #print "moisture: %s" % (moisture) + " naam: %s" % naam
     if moisture < '35':
-        sendBericht("Plant %s" % (plantid) + " heeft weinig water.", "Er zal binnenkort automatisch water worden gegeven.")
+        sendBericht(naam + " heeft weinig water.", "Uw plant zal binnenkort water krijgen.")
